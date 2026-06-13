@@ -1,11 +1,40 @@
-import { Pool } from 'pg';
+import { Pool, type PoolConfig } from 'pg';
 
 declare global {
   // eslint-disable-next-line no-var
   var __vimesPgPool: Pool | undefined;
 }
 
-function getVimesDbConfig() {
+function shouldUseSsl(useConnectionString: boolean): boolean | { rejectUnauthorized: boolean } {
+  const flag = process.env.VIMES_DB_SSL?.trim().toLowerCase();
+  if (flag === 'true' || flag === '1' || flag === 'yes') {
+    return { rejectUnauthorized: false };
+  }
+  if (flag === 'false' || flag === '0' || flag === 'no') {
+    return false;
+  }
+  if (useConnectionString && process.env.VERCEL === '1') {
+    return { rejectUnauthorized: false };
+  }
+  return false;
+}
+
+function getVimesDbConfig(): PoolConfig {
+  const connectionString =
+    process.env.DATABASE_URL?.trim() ||
+    process.env.VIMES_DATABASE_URL?.trim() ||
+    process.env.POSTGRES_URL?.trim();
+
+  if (connectionString) {
+    return {
+      connectionString,
+      ssl: shouldUseSsl(true),
+      max: 10,
+      idleTimeoutMillis: 30_000,
+      connectionTimeoutMillis: 10_000,
+    };
+  }
+
   const host = process.env.VIMES_DB_HOST?.trim();
   const port = Number(process.env.VIMES_DB_PORT || 5432);
   const user = process.env.VIMES_DB_USER?.trim();
@@ -14,7 +43,7 @@ function getVimesDbConfig() {
 
   if (!host || !user || !database) {
     throw new Error(
-      'Thiếu cấu hình DB (VIMES_DB_HOST, VIMES_DB_USER, VIMES_DB_NAME).',
+      'Thiếu cấu hình DB. Trên Vercel: thêm DATABASE_URL hoặc VIMES_DB_HOST, VIMES_DB_USER, VIMES_DB_NAME trong Settings → Environment Variables. Xem env.example.',
     );
   }
 
@@ -24,6 +53,7 @@ function getVimesDbConfig() {
     user,
     password: password ?? '',
     database,
+    ssl: shouldUseSsl(false),
     max: 10,
     idleTimeoutMillis: 30_000,
     connectionTimeoutMillis: 10_000,

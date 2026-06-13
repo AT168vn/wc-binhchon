@@ -1,3 +1,5 @@
+import { withBasePath } from '@/lib/base-path';
+
 type ScheduleImageProps = {
   src: string;
   alt: string;
@@ -16,7 +18,7 @@ export default function ScheduleImage({
   return (
     // eslint-disable-next-line @next/next/no-img-element
     <img
-      src={src}
+      src={withBasePath(src)}
       alt={alt}
       loading={priority ? 'eager' : 'lazy'}
       decoding={priority ? 'sync' : 'async'}

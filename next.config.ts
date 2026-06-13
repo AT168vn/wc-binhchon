@@ -1,7 +1,9 @@
 import type { NextConfig } from 'next';
 
 const isGithubPages = process.env.GITHUB_PAGES === 'true';
-const githubPagesBasePath = '/wc-binhchon';
+const githubPagesBasePath = (process.env.NEXT_PUBLIC_BASE_PATH || '/wc-binhchon')
+  .trim()
+  .replace(/\/$/, '');
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
@@ -25,9 +27,7 @@ const nextConfig: NextConfig = {
       }),
 
   // Tối ưu development performance
-  experimental: {
-    optimizePackageImports: ['react-chartjs-2', 'chart.js'],
-  },
+  experimental: {},
 
   // Next.js 15 expects Turbopack options at the top-level, not under `experimental`.
   turbopack: {

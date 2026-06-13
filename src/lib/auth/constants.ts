@@ -74,7 +74,7 @@ export const AUTH_CONFIG = {
   ROUTES: {
     login: '/login',
     home: '/wc_bongda',
-    publicPaths: ['/login', '/_next', '/api', '/images', '/icons', '/favicon.ico'],
+    publicPaths: ['/login', '/wc_ketqua', '/_next', '/api', '/images', '/icons', '/favicon.ico'],
   },
 
   // Error messages

@@ -28,13 +28,13 @@ async function restore() {
 
 function runNextBuild() {
   return new Promise((resolve, reject) => {
-    const isWindows = process.platform === 'win32';
-    const command = isWindows ? 'npx.cmd' : 'npx';
-    const child = spawn(command, ['next', 'build'], {
+    const child = spawn('npm', ['run', 'build'], {
       stdio: 'inherit',
+      shell: true,
       env: {
         ...process.env,
         GITHUB_PAGES: 'true',
+        NEXT_PUBLIC_BASE_PATH: process.env.NEXT_PUBLIC_BASE_PATH || '/wc-binhchon',
       },
     });
 

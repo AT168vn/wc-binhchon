@@ -10,23 +10,19 @@ export default function Home() {
   const router = useRouter();
 
   useEffect(() => {
-    const checkAuthState = () => {
-      try {
-        const encryptedToken = Cookies.get(AUTH_CONFIG.COOKIE.accessTokenKey);
-        const accessToken = encryptedToken ? getDecryptedToken(encryptedToken) : null;
-        const user = Cookies.get(AUTH_CONFIG.COOKIE.userKey);        
-        
-        if (accessToken && user) {
-          router.replace('/wc_bongda');
-        } else {
-          router.replace('/login');
-        }
-      } catch (error) {        
-        router.replace('/login');
-      }
-    };
+    try {
+      const encryptedToken = Cookies.get(AUTH_CONFIG.COOKIE.accessTokenKey);
+      const accessToken = encryptedToken ? getDecryptedToken(encryptedToken) : null;
+      const user = Cookies.get(AUTH_CONFIG.COOKIE.userKey);
 
-    checkAuthState();
+      if (accessToken && user) {
+        router.replace(AUTH_CONFIG.ROUTES.home);
+      } else {
+        router.replace(AUTH_CONFIG.ROUTES.login);
+      }
+    } catch {
+      router.replace(AUTH_CONFIG.ROUTES.login);
+    }
   }, [router]);
 
   return <div className="min-h-screen" />;

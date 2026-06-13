@@ -8,6 +8,7 @@ import BackgroundLogin from '@/components/ui/BackgroundLogin';
 import { handleLoginBinhChon } from '@/lib/auth/api';
 import { AUTH_CONFIG } from '@/lib/auth/constants';
 import { validateAndCleanupTokens } from '@/lib/auth/utils';
+import { navigateToAppPath, withBasePath } from '@/lib/base-path';
 
 function getAppVersionPlain(): string {
   const raw = (process.env.NEXT_PUBLIC_VERSION || '0.0.1').trim();
@@ -65,7 +66,7 @@ const LoginForm = () => {
         (response) => {
           setAuth(response.accessToken, response.userInfo);
           Cookies.remove(AUTH_CONFIG.COOKIE.returnUrlKey);
-          window.location.href = AUTH_CONFIG.ROUTES.home;
+          navigateToAppPath(AUTH_CONFIG.ROUTES.home);
           window.clearTimeout(timeoutId);
         },
         (errorMessage) => {
@@ -85,7 +86,7 @@ const LoginForm = () => {
 
   return (
     <BackgroundLogin
-      backgroundImage="/images/bang-dau5.jpg"
+      backgroundImage={withBasePath('/images/bang-dau5.jpg')}
       className="min-h-dvh w-full"
       contentClassName="relative flex min-h-screen items-center justify-center px-4 py-8"
     >
