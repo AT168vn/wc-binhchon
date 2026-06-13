@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <system.webServer>
+        <handlers>
+            <add name="iisnode" path="server.js" verb="*" modules="iisnode" />
+        </handlers>
+        <rewrite>
+            <rules>
+                <rule name="NextJSApp" stopProcessing="true">
+                    <match url="^(.*)$" />
+                    <conditions logicalGrouping="MatchAll" trackAllCaptures="false" />
+                    <action type="Rewrite" url="server.js" />
+                </rule>
+            </rules>
+        </rewrite>
+		<iisnode node_env="development" nodeProcessCommandLine="&quot;%programfiles%\nodejs\node.exe&quot;"/>		
+    </system.webServer>
+</configuration>

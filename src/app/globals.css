@@ -1,0 +1,267 @@
+@import "tailwindcss";
+@import "react-datepicker/dist/react-datepicker.css";
+
+/* Bảng màu chuẩn eHealth (Tailwind v4) - Hình 1–3: Professional Trust, Modern Wellness, Semantic */
+@theme {
+  /* 1. Professional Trust */
+  --color-primary: #007BFF;
+  --color-primary-dark: #0062CC;
+  --color-secondary: #17A2B8;
+  /* 2. Modern Wellness */
+  --color-surface-ground: #F8F9FA;
+  --color-surface-card: #FFFFFF;
+  --color-surface-border: #E9ECEF;
+  --color-text-primary: #212529;
+  --color-deep-navy: #2d3e50;
+  --color-soft-gray: #E9ECEF;
+  /* 3. Semantic Status */
+  --color-status-pending: #6C757D;
+  --color-status-progress: #007BFF;
+  --color-status-completed: #28A745;
+  --color-status-urgent: #DC3545;
+}
+
+:root {
+  /* Professional Trust + Modern Wellness (eHealth) */
+  --background: #F8F9FA;
+  --foreground: #212529;
+  --surface: #FFFFFF;
+  --sidebar-bg: #1f3a5f;
+  --menu-text: #ffffff;
+  --menu-hover-bg: #E9ECEF;
+  --menu-hover-text: #007BFF;
+  --border-light: #E9ECEF;
+  --primary: #007BFF;
+  --primary-dark: #0062CC;
+  --secondary: #17A2B8;
+  --accent: #007BFF;
+  --text-primary: #212529;
+  /* Semantic status */
+  --status-pending: #6C757D;
+  --status-progress: #007BFF;
+  --status-completed: #28A745;
+  --status-urgent: #DC3545;
+  font-size: 1rem;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+/* Áp dụng Segoe UI cho toàn bộ app, kể cả MUI */
+body,
+.MuiTypography-root,
+.MuiButton-root,
+.MuiInputBase-input,
+.MuiMenuItem-root,
+.MuiTableCell-root,
+.MuiFormLabel-root,
+.MuiListItemText-primary {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif !important;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+/* Thu nhỏ thanh cuộn sidebar  toàn bộ thanh cuộn*/
+::-webkit-scrollbar {
+  width: 3px; /* Độ rộng thanh cuộn */
+  height: 5px;
+}
+
+/* Màu nền của thanh cuộn */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Màu và bo tròn của thanh cuộn */
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+/* Hiệu ứng khi hover vào thanh cuộn */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}  
+
+/************ CUSTOM - Sidebar & Menu (nền #1F3A5F, accent menu #3AAFA9) ***********/
+aside#sidebar {
+  background-color: #1f3a5f;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    inset -1px 0 0 rgba(255, 255, 255, 0.05),
+    4px 0 28px rgba(0, 0, 0, 0.3);
+}
+
+/* Menu sidebar — accent #3AAFA9 + chuyển màu mượt */
+aside#sidebar .item-link {
+  color: #3AAFA9;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  transition:
+    color 0.32s cubic-bezier(0.4, 0, 0.2, 1),
+    background-color 0.32s cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 0.32s cubic-bezier(0.4, 0, 0.2, 1),
+    text-shadow 0.32s cubic-bezier(0.4, 0, 0.2, 1);
+}
+aside#sidebar .item-link:hover {
+  color: #ffffff;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35), 0 0 12px rgba(255, 255, 255, 0.25);
+  background-color: rgba(58, 175, 169, 0.2);
+  box-shadow: inset 0 1px 0 rgba(58, 175, 169, 0.4);
+}
+aside#sidebar .item-link.isActive {
+  color: #ffffff;
+  background-color: rgba(58, 175, 169, 0.34);
+  box-shadow: inset 0 1px 0 rgba(127, 220, 214, 0.5);
+}
+
+aside#sidebar .sidebar-scroll-area::-webkit-scrollbar {
+  width: 4px;
+}
+aside#sidebar .sidebar-scroll-area::-webkit-scrollbar-track {
+  background: transparent;
+}
+aside#sidebar .sidebar-scroll-area::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.28);
+  border-radius: 4px;
+}
+aside#sidebar .sidebar-scroll-area::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.4);
+}
+
+/* --- Custom React Datepicker --- */
+.react-datepicker__month {
+  /* Không nên thay đổi display, chỉ thêm scroll nếu muốn */
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.react-datepicker__week {
+  display: flex;
+  justify-content: space-between;
+}
+
+.react-datepicker__day {
+  color: #1e293b !important;
+  background: none !important;
+  border-radius: 8px !important;
+  transition: background 0.2s, color 0.2s;
+}
+
+.react-datepicker__day--outside-month {
+  color: #bdbdbd !important;
+  opacity: 0.35 !important;
+  background: none !important;
+  pointer-events: none;
+}
+
+.react-datepicker__day--selected,
+.react-datepicker__day--keyboard-selected {
+  background: var(--primary) !important;
+  color: #fff !important;
+  border-radius: 8px !important;
+}
+
+.react-datepicker__day:hover {
+  background: #dbeafe !important;
+  color: #1e40af !important;
+  border-radius: 8px !important;
+}
+
+.react-datepicker__current-month,
+.react-datepicker__day-name {
+  color: var(--primary) !important;
+  font-weight: bold;
+}
+
+.react-datepicker {
+  border: 2px solid var(--primary) !important;
+  box-shadow: 0 4px 24px 0 rgba(32,107,196,0.15) !important;
+  border-radius: 12px !important;
+  font-family: inherit;
+  background: #f8fafc !important;
+}
+
+/* Thứ 7 (cột thứ 6) và Chủ nhật (cột thứ 7) màu đỏ */
+.react-datepicker__day--saturday,
+.react-datepicker__day--sunday,
+.react-datepicker__day-name--saturday,
+.react-datepicker__day-name--sunday {
+  color: #e11d48 !important; /* rose-600 */
+  font-weight: bold;
+}
+
+/* Marquee animation cho dòng chữ chạy từ phải vào giữa */
+@keyframes marquee-enter {
+  from {
+    left: 100%;
+    transform: translateX(0%);
+  }
+  to {
+    left: 50%;
+    transform: translateX(-50%);
+  }
+}
+
+/* Marquee animation cho dòng chữ chạy từ giữa ra trái */
+@keyframes marquee-exit {
+  from {
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  to {
+    left: 0;
+    transform: translateX(-100%);
+  }
+}
+
+/* Mưa sao băng - xuất hiện từ mép trên web rơi xuống */
+@keyframes matrix-rain {
+  0% {
+    transform: translate3d(0, 0, 0);
+    opacity: 0;
+  }
+  2% {
+    opacity: 0.95;
+  }
+  88% {
+    opacity: 0.75;
+  }
+  100% {
+    transform: translate3d(0, 120vh, 0);
+    opacity: 0;
+  }
+}
+
+/* Lớp xa (3D depth) - chậm hơn, mờ hơn */
+@keyframes matrix-rain-far {
+  0% {
+    transform: translate3d(0, 0, 0) scale(0.7);
+    opacity: 0;
+  }
+  3% {
+    opacity: 0.45;
+  }
+  92% {
+    opacity: 0.28;
+  }
+  100% {
+    transform: translate3d(0, 120vh, 0) scale(0.7);
+    opacity: 0;
+  }
+}
+
+/* Ảnh lịch WC — giữ sắc nét khi scale trong layout */
+.wc-schedule-image {
+  image-rendering: auto;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+
+@media (-webkit-min-device-pixel-ratio: 1.25), (min-resolution: 120dpi) {
+  .wc-schedule-image {
+    image-rendering: -webkit-optimize-contrast;
+  }
+}

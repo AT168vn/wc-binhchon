@@ -1,0 +1,63 @@
+@keyframes authLoginAnimStar {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(2000px);
+  }
+}
+
+.tamAnhAuthGradient {
+  background-color: rgb(0, 102, 204);
+  background-image: linear-gradient(to bottom, rgb(0, 102, 204) 0%, rgb(0, 6, 204) 100%);
+}
+
+@media (min-width: 992px) {
+  .tamAnhAuthGradient {
+    background-image: url('/images/background-overlay.png'),
+      linear-gradient(to bottom, rgb(0, 102, 204) 0%, rgb(0, 6, 204) 100%);
+    background-repeat: no-repeat, no-repeat;
+    background-position: right top, center;
+    background-size: contain, auto;
+  }
+}
+
+.tamAnhAuthStarsContainer {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.tamAnhAuthStars {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 2px;
+  height: 2px;
+  border-radius: 50%;
+  background: transparent;
+  box-shadow:
+    40px 80px #fff, 120px 260px #fff, 280px 120px #fff, 420px 320px #fff, 560px 140px #fff,
+    680px 360px #fff, 840px 220px #fff, 980px 420px #fff, 1140px 180px #fff, 1280px 300px #fff,
+    1440px 120px #fff, 1620px 360px #fff, 1760px 220px #fff, 1920px 420px #fff, 2080px 160px #fff,
+    2240px 340px #fff, 2360px 260px #fff, 120px 620px #fff, 260px 760px #fff, 420px 900px #fff,
+    620px 680px #fff, 760px 860px #fff, 940px 700px #fff, 1120px 980px #fff, 1280px 760px #fff,
+    1460px 920px #fff, 1620px 700px #fff, 1780px 860px #fff, 1960px 760px #fff, 2140px 960px #fff,
+    2320px 720px #fff, 80px 1180px #fff, 260px 1320px #fff, 440px 1140px #fff, 640px 1280px #fff,
+    820px 1460px #fff, 980px 1200px #fff, 1180px 1360px #fff, 1340px 1220px #fff, 1520px 1400px #fff,
+    1700px 1180px #fff, 1880px 1320px #fff, 2040px 1160px #fff, 2220px 1380px #fff, 2380px 1240px #fff;
+  animation: authLoginAnimStar 45s linear infinite;
+}
+
+.tamAnhAuthStars::after {
+  content: '';
+  position: absolute;
+  top: -2000px;
+  left: 0;
+  width: 2px;
+  height: 2px;
+  border-radius: 50%;
+  background: transparent;
+  box-shadow: inherit;
+}
