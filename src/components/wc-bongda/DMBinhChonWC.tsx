@@ -135,6 +135,7 @@ function PollFrame({
   const [isSaving, setIsSaving] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
   const isExpired = usePollFrameClosed(frame);
+  const isReadOnly = !suTaikhoan;
 
   useEffect(() => {
     if (savedVote) {
@@ -212,7 +213,7 @@ function PollFrame({
               className="flex flex-wrap items-center justify-center gap-1 py-0.5"
               role="radiogroup"
               aria-label={frame.title ?? 'Bình chọn'}
-              aria-disabled={isLocked}
+              aria-disabled={isLocked || isReadOnly}
             >
               {frame.options.map((option) => {
                 const isSelected = selectedOptionId === option.id;
@@ -223,15 +224,15 @@ function PollFrame({
                     type="button"
                     role="radio"
                     aria-checked={isSelected}
-                    disabled={isExpired || isLocked || isSaving}
+                    disabled={isExpired || isLocked || isSaving || isReadOnly}
                     onClick={() => {
-                      if (isExpired) {
+                      if (isExpired || isReadOnly) {
                         return;
                       }
                       setSelectedOptionId(option.id);
                     }}
                     className={`min-w-[64px] rounded-sm px-2 py-1 text-xs font-medium transition-colors ${
-                      isExpired || isLocked
+                      isExpired || isLocked || isReadOnly
                         ? isSelected
                           ? 'cursor-not-allowed bg-[#006699] text-white opacity-90'
                           : 'cursor-not-allowed border border-[#e5e7eb] bg-[#f3f4f6] text-[#9ca3af]'
@@ -251,7 +252,7 @@ function PollFrame({
             <div className="flex flex-wrap justify-center gap-1.5 pt-0.5">
               <button
                 type="button"
-                disabled={isExpired || isLocked || !selectedOptionId || isSaving || !suTaikhoan}
+                disabled={isExpired || isLocked || !selectedOptionId || isSaving || isReadOnly}
                 onClick={() => void persistVote(true)}
                 className="rounded-sm bg-[#70ad47] px-3 py-1 text-xs font-medium text-white shadow-sm transition-colors hover:bg-[#5f9638] disabled:cursor-not-allowed disabled:bg-[#c8dcc0] disabled:text-[#5f6f58] disabled:shadow-none"
               >
@@ -259,7 +260,7 @@ function PollFrame({
               </button>
               <button
                 type="button"
-                disabled={isExpired || !isLocked || isSaving || !suTaikhoan}
+                disabled={isExpired || !isLocked || isSaving || isReadOnly}
                 onClick={() => void persistVote(false)}
                 className="rounded-sm border border-[#cfd8dc] bg-white px-3 py-1 text-xs font-medium text-[#111827] transition-colors hover:bg-[#f5f7f9] disabled:cursor-not-allowed disabled:border-[#e5e7eb] disabled:bg-[#f3f4f6] disabled:text-[#9ca3af]"
               >
@@ -467,6 +468,14 @@ export default function DMBinhChonWC() {
     sortedRounds[0];
 
   const tinhDiemNgay = selectedRound ? isWcScoringDate(selectedRound.date) : false;
+  const canEditVotes = Boolean(
+    loggedInTaikhoan &&
+      selectedTaiKhoan &&
+      selectedTaiKhoan.toLowerCase() === loggedInTaikhoan.toLowerCase(),
+  );
+  const selectedTaiKhoanHoten =
+    tongHopList.find((item) => item.su_taikhoan === selectedTaiKhoan)?.su_hoten?.trim() ||
+    selectedTaiKhoan;
 
   useEffect(() => {
     if (!selectedRound) {
@@ -522,12 +531,12 @@ export default function DMBinhChonWC() {
   }, [selectedRound?.date, tongHopReloadKey, loggedInTaikhoan]);
 
   useEffect(() => {
-    if (!loggedInTaikhoan || !selectedRound) {
+    if (!selectedTaiKhoan || !selectedRound) {
       setKetQuaMap({});
       return;
     }
 
-    const suTaikhoan = loggedInTaikhoan;
+    const suTaikhoan = selectedTaiKhoan;
     const roundDate = selectedRound.date;
 
     let cancelled = false;
@@ -576,7 +585,7 @@ export default function DMBinhChonWC() {
     return () => {
       cancelled = true;
     };
-  }, [loggedInTaikhoan, selectedRound.id, selectedRound.date]);
+  }, [selectedTaiKhoan, selectedRound.id, selectedRound.date]);
 
   function handleSavedVote(vote: KetQuaBinhChon) {
     setKetQuaMap((current) => ({
@@ -733,9 +742,18 @@ export default function DMBinhChonWC() {
           {ketQuaError ? (
             <p className="mb-3 text-sm text-[#b3261e]">{ketQuaError}</p>
           ) : null}
+          {showLoggedInUser && selectedTaiKhoan && !canEditVotes ? (
+            <p className="mb-3 rounded-sm border border-[#b8dce8] bg-[#e6f4fb] px-3 py-2 text-sm text-[#374151]">
+              Đang xem bình chọn của{' '}
+              <span className="font-semibold text-[#0088cc]">{selectedTaiKhoanHoten}</span>. Chỉ
+              tài khoản đang đăng nhập (
+              <span className="font-semibold text-[#0088cc]">{loggedInHoten}</span>) mới được bình
+              chọn.
+            </p>
+          ) : null}
           <ScheduleRoundContent
             round={selectedRound}
-            suTaikhoan={showLoggedInUser ? loggedInTaikhoan : null}
+            suTaikhoan={canEditVotes ? loggedInTaikhoan : null}
             ketQuaMap={ketQuaMap}
             onSaved={handleSavedVote}
           />

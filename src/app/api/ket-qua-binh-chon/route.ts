@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { findPollFrame, isPollFrameClosed } from '@/config/wc-schedule';
 import { JSON_NO_CACHE_HEADERS } from '@/lib/server/pmquanly-json';
+import { getWcSessionSuTaikhoanFromRequest } from '@/lib/server/wc-session-token';
 import {
   queryKetQuaBinhChon,
   upsertKetQuaBinhChon,
@@ -72,6 +73,21 @@ export async function POST(request: NextRequest) {
     if (pollFrame && isPollFrameClosed(pollFrame)) {
       return NextResponse.json(
         { message: 'Đã hết thời gian bình chọn.' },
+        { status: 403, ...H },
+      );
+    }
+
+    const sessionSuTaikhoan = getWcSessionSuTaikhoanFromRequest(request);
+    if (!sessionSuTaikhoan) {
+      return NextResponse.json(
+        { message: 'Phiên đăng nhập không hợp lệ. Vui lòng đăng nhập lại.' },
+        { status: 401, ...H },
+      );
+    }
+
+    if (sessionSuTaikhoan.toLowerCase() !== suTaikhoan.toLowerCase()) {
+      return NextResponse.json(
+        { message: 'Bạn chỉ được cập nhật bình chọn của chính mình.' },
         { status: 403, ...H },
       );
     }
