@@ -17,6 +17,7 @@ import {
 import { WC_LAYOUT } from '@/components/wc-bongda/wc-layout-styles';
 import ScheduleImage from '@/components/wc-bongda/ScheduleImage';
 import { usePollFrameClosed } from '@/components/wc-bongda/usePollFrameClosed';
+import { resolveAppApiPath } from '@/lib/app-api-path';
 
 type TaiKhoanBinhChon = {
   su_taikhoan: string;
@@ -47,7 +48,7 @@ async function saveKetQuaBinhChon(payload: {
   ket_qua_ten: string | null;
   da_khoa: boolean;
 }): Promise<KetQuaBinhChon> {
-  const res = await fetch('/api/ket-qua-binh-chon', {
+  const res = await fetch(resolveAppApiPath('/api/ket-qua-binh-chon'), {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload),
@@ -492,7 +493,7 @@ export default function DMBinhChonWC() {
 
       try {
         const params = new URLSearchParams({ ngay: roundDate });
-        const res = await fetch(`/api/tong-hop-binh-chon?${params.toString()}`, {
+        const res = await fetch(resolveAppApiPath(`/api/tong-hop-binh-chon?${params.toString()}`), {
           cache: 'no-store',
         });
         const body = (await res.json().catch(() => null)) as
@@ -550,7 +551,7 @@ export default function DMBinhChonWC() {
           su_taikhoan: suTaikhoan,
           ngay: roundDate,
         });
-        const res = await fetch(`/api/ket-qua-binh-chon?${params.toString()}`, {
+        const res = await fetch(resolveAppApiPath(`/api/ket-qua-binh-chon?${params.toString()}`), {
           cache: 'no-store',
         });
         const body = (await res.json().catch(() => null)) as

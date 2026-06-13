@@ -8,6 +8,7 @@
     "dev-all": "rimraf .next && node start-dev.js",
     "dev:fresh": "rimraf .next node_modules/.cache && cross-env PORT=3001 NODE_ENV=development node server.js",
     "build": "next build",
+    "build:pages": "node scripts/build-github-pages.mjs",
     "start": "cross-env NODE_ENV=production node server.js",
     "lint": "next lint",
     "typecheck": "tsc --noEmit",

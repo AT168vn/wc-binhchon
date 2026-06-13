@@ -14,6 +14,7 @@ import {
 } from '@/config/wc-schedule';
 import { WC_LAYOUT } from '@/components/wc-bongda/wc-layout-styles';
 import ScheduleImage from '@/components/wc-bongda/ScheduleImage';
+import { resolveAppApiPath } from '@/lib/app-api-path';
 
 const PAGE_TITLE = 'Cập nhật kết quả trận đấu';
 
@@ -31,7 +32,7 @@ async function saveKetQuaThucTe(payload: {
   ket_qua: string;
   ket_qua_ten: string | null;
 }): Promise<KetQuaThucTe> {
-  const res = await fetch('/api/ket-qua-thuc-te', {
+  const res = await fetch(resolveAppApiPath('/api/ket-qua-thuc-te'), {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload),
@@ -391,7 +392,7 @@ export default function DMKetQuaWC() {
 
       try {
         const params = new URLSearchParams({ ngay: roundDate });
-        const res = await fetch(`/api/ket-qua-thuc-te?${params.toString()}`, {
+        const res = await fetch(resolveAppApiPath(`/api/ket-qua-thuc-te?${params.toString()}`), {
           cache: 'no-store',
         });
         const body = (await res.json().catch(() => null)) as

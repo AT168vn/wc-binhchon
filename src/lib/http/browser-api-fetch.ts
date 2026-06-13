@@ -1,4 +1,5 @@
 import { API_CONFIG } from '@/lib/auth/constants';
+import { resolveAppApiPath } from '@/lib/app-api-path';
 
 /**
  * Bật gọi trực tiếp từ trình duyệt tới API backend (1 chặng)
@@ -27,6 +28,11 @@ function browserDirectAuthBase(): string {
  * - Còn lại → api.pmquanly (kèm prefix path như proxy).
  */
 export function resolvePmquanlyBrowserUrl(path: string): string {
+  const appApiPath = resolveAppApiPath(path);
+  if (appApiPath.startsWith('http')) {
+    return appApiPath;
+  }
+
   if (!isPmquanlyBrowserDirectEnabled() || !path.startsWith('/api/')) {
     return path;
   }
